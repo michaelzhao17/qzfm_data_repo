@@ -68,20 +68,20 @@ def find_start_idx(series, sr, stab_cond):
 #%% get mean and std of coil readings + cell readings compiled into separate csv file
 
 sensor = 'AAL9'
-axis = 'x'
+axis = 'y'
 date = 'jun06'
 trial = 1
 #%%
-write_to_file_path = '..//results//{}//{}//'.format(sensor, date)
+write_to_file_path = '../data/Offset/processed/{}/{}/'.format(sensor, date)
 write_to_file_name = 'around_{}axis_trial{}.csv'.format(axis, trial)
 
-
-for file in glob.glob('..//data//{}//{}_around_{}axis//*COIL*.csv'.format(date, sensor, axis)):
+plt.figure()
+for file in glob.glob('..//data//Offset//raw//{}//around_{}//*COIL*.csv'.format(date, axis)):
     coil_df = pd.read_csv(file)
-    coil_x = coil_df['x']
-    coil_y = coil_df['y']
-    coil_z = coil_df['z']
-    cell_df = pd.read_csv(file[:48]+'CELL'+file[52:])
+    coil_x = coil_df['x'].iloc[:-10]
+    coil_y = coil_df['y'].iloc[:-10]
+    coil_z = coil_df['z'].iloc[:-10]
+    cell_df = pd.read_csv(file[:52]+'CELL'+file[56:])
     cell_x = cell_df['x']
     cell_y = cell_df['y']
     cell_z = cell_df['z']
@@ -128,19 +128,21 @@ for file in glob.glob('..//data//{}//{}_around_{}axis//*COIL*.csv'.format(date, 
             "# cell Bz (pT) mean":np.mean(cell_z[z_second_start:z_second_end]),
             "# cell Bz (pT) std":np.std(cell_z[z_second_start:z_second_end]),
             }
-
+    
+    plt.plot(coil_y)
+    plt.vlines(y_start, -10000, 10000)
     # append to file
     append_to_file(write_to_file_path+write_to_file_name, data)
     
 
 #%%
 # perform offset calculations 
-sensor = 'AAL9'
-date = 'jun06'
+sensor = 'AAY4'
+date = 'may31'
 trial = 1
 
 # which offset to get
-axis = 'z'
+axis = 'x'
 
 if axis == 'x':
     allresults = pd.read_csv('../data/Offset/processed/{}/{}/around_{}axis_trial{}.csv'.format(sensor, date, 'y', trial))
