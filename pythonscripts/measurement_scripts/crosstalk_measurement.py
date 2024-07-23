@@ -131,41 +131,7 @@ for trial in range(3):
         input('Just finished {} phase, turn on/off second sensor'.format(phase))
         
 
-#%%
-lowcut = 76
-highcut = 78
 
-
-for axis in range(1):
-    plt.figure()
-    plt.plot(out[axis+1, :])
-    plt.plot(butter_bandpass_filter(out[axis+1, :], lowcut, highcut, sr, 5))
-    plt.grid()
-    plt.show()
-#%%
-plt.figure()
-for axis in range(1):
-    a, b = signal.periodogram(out[axis+1, :], sr)
-    plt.semilogy(a, np.sqrt(b), label=axis)
-plt.legend()
-plt.grid()
-plt.show()
-
-#%%
-no_q = out
-
-#%%
-
-plt.figure()
-
-a, b = signal.periodogram(out[1, :], sr)
-plt.semilogy(a, np.sqrt(b), label='Quspin Off')
-
-c, d = signal.periodogram(no_q[1, :], sr)
-plt.semilogy(c, np.sqrt(d), label='Quspin On')
-plt.legend()
-plt.grid()
-plt.show()
 
 
 
